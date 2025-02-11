@@ -5,13 +5,11 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist/",
-    "src/"
+    "dist/"
   ],
   "scripts": {
     "lint": "eslint \"src/**/*.{ts, tsx}\"",
     "test": "yarn run test:ts && yarn run lint",
-    "prepare": "npm run build",
     "release": "yarn semantic-release",
     "build": "tsc",
     "dev": "tsc --watch",
