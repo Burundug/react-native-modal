@@ -265,7 +265,9 @@ export class ReactNativeModal extends React.Component<ModalProps, State> {
   }
 
   componentWillUnmount() {
-    this.backHandler.remove();
+    if (this.backHandler) {
+      this.backHandler.remove();
+    }
     if (this.didUpdateDimensionsEmitter) {
       this.didUpdateDimensionsEmitter.remove();
     }
