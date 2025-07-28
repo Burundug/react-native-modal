@@ -17,6 +17,7 @@ import {
   View,
   ViewStyle,
   ViewProps,
+  NativeEventSubscription,
 } from 'react-native';
 import * as PropTypes from 'prop-types';
 import * as animatable from 'react-native-animatable';
@@ -138,6 +139,7 @@ export class ReactNativeModal extends React.Component<ModalProps, State> {
     backdropTransitionInTiming: PropTypes.number,
     backdropTransitionOutTiming: PropTypes.number,
     customBackdrop: PropTypes.node,
+    backHandler: null,
     children: PropTypes.node.isRequired,
     deviceHeight: PropTypes.number,
     deviceWidth: PropTypes.number,
@@ -206,6 +208,7 @@ export class ReactNativeModal extends React.Component<ModalProps, State> {
   didUpdateDimensionsEmitter: OrNull<EmitterSubscription> = null;
 
   interactionHandle: OrNull<number> = null;
+  backHandler: NativeEventSubscription | undefined;
 
   constructor(props: ModalProps) {
     super(props);
@@ -255,11 +258,14 @@ export class ReactNativeModal extends React.Component<ModalProps, State> {
     if (this.state.isVisible) {
       this.open();
     }
-    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPress);
+    this.backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      this.onBackButtonPress,
+    );
   }
 
   componentWillUnmount() {
-    BackHandler.remove();
+    this.backHandler.remove();
     if (this.didUpdateDimensionsEmitter) {
       this.didUpdateDimensionsEmitter.remove();
     }
@@ -776,7 +782,10 @@ export class ReactNativeModal extends React.Component<ModalProps, State> {
 
     const {testID, ...containerProps} = otherProps;
     const computedStyle = [
-      {margin: this.getDeviceWidth() * 0.05, transform: [{translateY: 0}]},
+      {
+        margin: this.getDeviceWidth() * 0.05,
+        transform: [{translateY: 0}],
+      },
       styles.content,
       style,
     ];
