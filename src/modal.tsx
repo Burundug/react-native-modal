@@ -798,8 +798,20 @@ export class ReactNativeModal extends React.Component<ModalProps, State> {
       panHandlers = {...this.panResponder!.panHandlers};
 
       if (useNativeDriver) {
+        const translateTransform = this.state.pan!.getTranslateTransform();
         panPosition = {
-          transform: this.state.pan!.getTranslateTransform(),
+          transform: translateTransform.map(
+            (transform: {
+              translateX?: Animated.AnimatedValue;
+              translateY?: Animated.AnimatedValue;
+            }) => {
+              const key = Object.keys(transform)[0] as
+                | 'translateX'
+                | 'translateY';
+              const value = transform[key]!;
+              return {[key]: value};
+            },
+          ),
         };
       } else {
         panPosition = this.state.pan!.getLayout();
