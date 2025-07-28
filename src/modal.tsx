@@ -232,7 +232,10 @@ export class ReactNativeModal extends React.Component<ModalProps, State> {
     }
   }
 
-  static getDerivedStateFromProps(nextProps: Readonly<ModalProps>, state: State) {
+  static getDerivedStateFromProps(
+    nextProps: Readonly<ModalProps>,
+    state: State,
+  ) {
     if (!state.isVisible && nextProps.isVisible) {
       return {isVisible: true, showContent: true};
     }
@@ -256,10 +259,7 @@ export class ReactNativeModal extends React.Component<ModalProps, State> {
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener(
-      'hardwareBackPress',
-      this.onBackButtonPress,
-    );
+    BackHandler.remove();
     if (this.didUpdateDimensionsEmitter) {
       this.didUpdateDimensionsEmitter.remove();
     }
