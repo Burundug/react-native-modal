@@ -228,6 +228,7 @@ export declare class ReactNativeModal extends React.Component<
   open: () => void;
   close: () => void;
   makeBackdrop: () => React.JSX.Element | null;
+  private stableAnimatedValueZero;
   render(): React.JSX.Element;
 }
 export default ReactNativeModal;
