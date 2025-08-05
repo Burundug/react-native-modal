@@ -675,8 +675,13 @@ export class ReactNativeModal extends React.Component {
     if (this.state.isSwipeable) {
       panHandlers = {...this.panResponder.panHandlers};
       if (useNativeDriver) {
+        const translateTransform = this.state.pan.getTranslateTransform();
         panPosition = {
-          transform: this.state.pan.getTranslateTransform(),
+          transform: translateTransform.map(transform => {
+            const key = Object.keys(transform)[0];
+            const value = transform[key];
+            return {[key]: value};
+          }),
         };
       } else {
         panPosition = this.state.pan.getLayout();
